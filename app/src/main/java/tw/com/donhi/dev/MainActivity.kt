@@ -14,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import org.json.JSONObject
 import tw.com.donhi.dev.databinding.ActivityMainBinding
 import tw.com.donhi.dev.network.passSSL
 import java.net.URL
@@ -50,11 +51,16 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         launch {
             val json = URL("https://donhi.com.tw/uploads/API/news2.json").readText()
             Log.d(TAG, "onCreate: $json")
+            //JSON解析
+            val jsonObject = JSONObject(json)
+            val array = jsonObject.getJSONArray("news")
+            for (i in 0..array.length()-1) {
+                val nws = array.getJSONObject(i)
+                val title = nws.getString("news_title")
+                val fileUrl = nws.getString("file_name")
+                Log.d(TAG, "onCreate: $title : $fileUrl")
+            }
         }
-//        Thread() {
-//            val json = URL("https://donhi.com.tw/uploads/API/news2.json").readText()
-//            Log.d(TAG, "onCreate: $json")
-//        }.start()
 
     }
 
