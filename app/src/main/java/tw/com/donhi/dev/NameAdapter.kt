@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import tw.com.donhi.dev.databinding.RowTextViewBinding
 
+//繼承RecyclerView身上的一個類別Adapter<ViewHolder>
 class NameAdapter(val names:List<String>) : RecyclerView.Adapter<NameAdapter.NameViewHolder>() {
     class NameViewHolder(var view: RowTextViewBinding) :RecyclerView.ViewHolder(view.root) {
 
@@ -17,7 +18,7 @@ class NameAdapter(val names:List<String>) : RecyclerView.Adapter<NameAdapter.Nam
         return NameViewHolder(binding)
     }
 
-    //回傳數目
+    //回傳資料的個數
     override fun getItemCount(): Int {
         return names.size
     }

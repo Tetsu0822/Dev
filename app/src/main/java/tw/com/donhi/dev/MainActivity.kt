@@ -63,10 +63,14 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             "John", "Dona", "lulu", "Jackie", "Ellen", "Gorge", "Gary", "Ruby", "Hank", "Joe",
             "Jenifer", "Sandy", "Sunny", "Abbe", "Cassy", "Dale", "Ella", "Hebe", "Salina")
         val recyler = binding.contentView.recycler
-        recyler.setHasFixedSize(true)
-        recyler.layoutManager = LinearLayoutManager(this)
-        //adapter 畫面資料的定義
-        recyler.adapter = NameAdapter(names)
+        //需設定三項
+        recyler.setHasFixedSize(true) //1.是否有固定大小
+        recyler.layoutManager = LinearLayoutManager(this) //2.設定裡面的Layout
+        //3.重要元件 adapter,畫面資料的定義，並新增『名稱』Adapter
+        //recyler.adapter = NameAdapter(names)
+        viewModel.news.observe(this) { news ->
+            recyler.adapter = NewAdapter(news)
+        }
 
 
 
