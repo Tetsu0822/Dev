@@ -10,6 +10,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
@@ -71,6 +72,15 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         viewModel.news.observe(this) { news ->
             recyler.adapter = NewAdapter(news)
         }
+        //Spinner
+        val nameAdapter = ArrayAdapter<String>(this,
+            android.R.layout.simple_spinner_item, names)
+        //設定下拉時的每一列
+        nameAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val spinner = binding.contentView.spinner
+        spinner.adapter = nameAdapter
+        //設定下拉選單的預設顯示項目
+        spinner.prompt = "Select Name"
 
 
 
