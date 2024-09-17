@@ -1,6 +1,11 @@
 package tw.com.donhi.dev
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.MediaStore.Audio.Media
 import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
@@ -11,6 +16,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
@@ -32,6 +38,14 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     val TAG = MainActivity::class.java.simpleName
+    //設定取得權限
+    val requestPermission = registerForActivityResult(ActivityResultContracts.RequestPermission()) { success ->
+        if (success) {
+            takePhoto()
+        } else {
+            Snackbar.make(binding.root, "Denied", Snackbar.LENGTH_LONG).show()
+        }
+    }
     //Dispatchers 可指定Job用哪個執行緒，IO
     //1.MAIN = 主執行緒,2.IO = 讀檔、儲存、網路,3.Default,4.Unconfined = 不限定的執行緒
     val job = Job() + Dispatchers.IO
@@ -111,11 +125,21 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         return when (item.itemId) {
             R.id.action_settings -> true
             R.id.action_camera -> {
-
+                //是否已取得使用者權限
+                if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+                    takePhoto()
+                } else {
+                    requestPermission.launch(Manifest.permission.CAMERA)
+                }
                 true //表是否已處理此功能所需的程式(consume事件)
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun takePhoto() {
+        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivity(intent)
     }
 
     override val coroutineContext: CoroutineContext
