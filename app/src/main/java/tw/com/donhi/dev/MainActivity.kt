@@ -1,6 +1,7 @@
 package tw.com.donhi.dev
 
 import android.os.Bundle
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -10,11 +11,13 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import tw.com.donhi.dev.databinding.ActivityMainBinding
+import java.net.URL
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    val TAG = MainActivity::class.java.simpleName
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +32,13 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null)
                 .setAnchorView(R.id.fab).show()
         }
+        //JSON
+        //https://donhi.com.tw/uploads/API/news2.json
+        Thread() {
+            val json = URL("https://api.jsonserve.com/pcLzBT").readText()
+            Log.d(TAG, "onCreate: $json")
+        }.start()
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
