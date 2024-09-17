@@ -103,12 +103,17 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         return true
     }
 
+    //使用者按下選單時，執行的方法
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
+            R.id.action_camera -> {
+
+                true //表是否已處理此功能所需的程式(consume事件)
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
