@@ -10,12 +10,14 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import tw.com.donhi.dev.databinding.ActivityMainBinding
+import tw.com.donhi.dev.network.News
 import tw.com.donhi.dev.network.passSSL
 import java.net.URL
 import kotlin.coroutines.CoroutineContext
@@ -52,16 +54,25 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
             val json = URL("https://donhi.com.tw/uploads/API/news2.json").readText()
             Log.d(TAG, "onCreate: $json")
             //JSON解析
-            val jsonObject = JSONObject(json)
-            val array = jsonObject.getJSONArray("news")
-            for (i in 0..array.length()-1) {
-                val nws = array.getJSONObject(i)
-                val title = nws.getString("news_title")
-                val fileUrl = nws.getString("file_name")
-                Log.d(TAG, "onCreate: $title : $fileUrl")
+//            parseJSON(json)
+            //GSON類別庫(處理JSON資料)
+            val news = Gson().fromJson(json, News::class.java)
+            for (n in news.news) {
+                Log.d(TAG, "onCreate: ${n.news_title} : ${n.file_name}")
             }
         }
 
+    }
+
+    private fun parseJSON(json: String) {
+        val jsonObject = JSONObject(json)
+        val array = jsonObject.getJSONArray("news")
+        for (i in 0..array.length() - 1) {
+            val nws = array.getJSONObject(i)
+            val title = nws.getString("news_title")
+            val fileUrl = nws.getString("file_name")
+            Log.d(TAG, "onCreate: $title : $fileUrl")
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
