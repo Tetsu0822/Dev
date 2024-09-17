@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -55,6 +56,18 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
         //信任SSL憑證
         passSSL.ignoreSsl()
         viewModel.readJSON()
+
+        //List 清單
+        //names
+        val names = listOf<String>("Aaren", "Aba", "Jack", "Jane", "Tetsu", "Win", "Carol",
+            "John", "Dona", "lulu", "Jackie", "Ellen", "Gorge", "Gary", "Ruby", "Hank", "Joe",
+            "Jenifer", "Sandy", "Sunny", "Abbe", "Cassy", "Dale", "Ella", "Hebe", "Salina")
+        val recyler = binding.contentView.recycler
+        recyler.setHasFixedSize(true)
+        recyler.layoutManager = LinearLayoutManager(this)
+        //adapter 畫面資料的定義
+        recyler.adapter = NameAdapter(names)
+
 
 
     }
