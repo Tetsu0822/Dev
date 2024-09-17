@@ -133,6 +133,12 @@ class MainActivity : AppCompatActivity(), CoroutineScope {
                 }
                 true //表是否已處理此功能所需的程式(consume事件)
             }
+            R.id.action_test -> {
+                Intent(this, NewsActivity::class.java).also {
+                    startActivity(it)
+                }
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
