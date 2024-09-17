@@ -10,15 +10,24 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import tw.com.donhi.dev.databinding.ActivityMainBinding
 import tw.com.donhi.dev.network.passSSL
 import java.net.URL
+import kotlin.coroutines.CoroutineContext
 
-class MainActivity : AppCompatActivity() {
+//Coroutines提供可繼承一個實作的CoroutineScope介面
+class MainActivity : AppCompatActivity(), CoroutineScope {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     val TAG = MainActivity::class.java.simpleName
+    //Dispatchers 可指定Job用哪個執行緒，IO
+    //1.MAIN = 主執行緒,2.IO = 讀檔、儲存、網路,3.Default,4.Unconfined = 不限定的執行緒
+    val job = Job() + Dispatchers.IO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +47,14 @@ class MainActivity : AppCompatActivity() {
         //https://donhi.com.tw/uploads/API/news2.json
         //信任SSL憑證
         passSSL.ignoreSsl()
-        Thread() {
+        launch {
             val json = URL("https://donhi.com.tw/uploads/API/news2.json").readText()
             Log.d(TAG, "onCreate: $json")
-        }.start()
+        }
+//        Thread() {
+//            val json = URL("https://donhi.com.tw/uploads/API/news2.json").readText()
+//            Log.d(TAG, "onCreate: $json")
+//        }.start()
 
     }
 
@@ -60,5 +73,8 @@ class MainActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    override val coroutineContext: CoroutineContext
+        get() = job
 
 }
