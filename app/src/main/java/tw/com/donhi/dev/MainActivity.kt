@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import tw.com.donhi.dev.databinding.ActivityMainBinding
+import tw.com.donhi.dev.network.passSSL
 import java.net.URL
 
 class MainActivity : AppCompatActivity() {
@@ -33,9 +34,12 @@ class MainActivity : AppCompatActivity() {
                 .setAnchorView(R.id.fab).show()
         }
         //JSON
+        //https://api.jsonserve.com/pcLzBT
         //https://donhi.com.tw/uploads/API/news2.json
+        //信任SSL憑證
+        passSSL.ignoreSsl()
         Thread() {
-            val json = URL("https://api.jsonserve.com/pcLzBT").readText()
+            val json = URL("https://donhi.com.tw/uploads/API/news2.json").readText()
             Log.d(TAG, "onCreate: $json")
         }.start()
 
